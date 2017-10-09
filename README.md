@@ -31,9 +31,8 @@ If you find this code useful, please consider citing:
 5. [Prepare training data](#prepare-training-data)
 6. [Training](#training)
 7. [Testing](#testing)
-8. [Visualization](#visualization)
-9. [Pretrained model](#pretrained-model)
-10. [Contact](#contact)
+8. [Pretrained model](#pretrained-model)
+9. [Contact](#contact)
 
 ## Installation
 
