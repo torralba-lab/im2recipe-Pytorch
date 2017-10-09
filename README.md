@@ -3,12 +3,12 @@
 This repository contains the code to train and evaluate models from the paper:  
 _Learning Cross-modal Embeddings for Cooking Recipes and Food Images_
 
-Important note: 
+Important note: In this repository the Skip-instructions has not been reimplemented in Pytorch, instead needed features are provided to train, validate and test the tri_joint model.
 
 Clone it using:
 
 ```shell
-git clone --recursive https://github.com/torralba-lab/im2recipe-pytorch.git
+git clone --recursive https://github.com/torralba-lab/im2recipe-Pytorch.git
 ```
 
 If you find this code useful, please consider citing:
@@ -93,7 +93,7 @@ Training word2vec with recipe data:
 
 ### Skip-instructions (Torch)
 
-In this repository the Skip-instructions is not implemented in Pytorch, instead we provide the needed features to train, validate and test tri_joint model. 
+In this repository the Skip-instructions is not implemented in Pytorch, instead we provide the necessary files to train, validate and test tri_joint model. 
 
 ### Creating LMDB file
 
@@ -102,7 +102,6 @@ Navigate back to ```./```. Run the following from ```./scripts```:
 ```
 python mk_dataset.py 
 -vocab /path/to/w2v/vocab.txt 
--dataset /path/to/recipe1M/ 
 -stvecs /path/to/skip-instr_files/
 ```
 
@@ -111,33 +110,28 @@ python mk_dataset.py
 - Train the model with: 
 ```
 python train.py 
---data_path /path/to/lmdb/files/ 
+--img_path /path/to/images/ 
+--data_path /path/to/lmdbs/ 
 --ingrW2V /path/to/w2v/vocab.bin
---snapfile snapshots/
+--snapshots snapshots/
 --valfreq 10
 ```
 
 *Note: Again, this can be run without arguments with default parameters if files are in the default location.*
 
-- You can use multiple GPUs to train the model with the ```-ngpus``` flag. With 4 GTX Titan X you can set ```-batchSize``` to ~150. This is the default config, which will make the model converge in about 3 days.
-- Plot loss curves anytime with ```python plotcurve.py -logfile /path/to/logfile.txt```. If ```dispfreq``` and ```valfreq``` are different than default, they need to be passed as arguments to this script for the curves to be correctly displayed. Running this script will also give you the elapsed training time. ```logifle.txt``` should contain the stdout of ```main.lua```. Redirect it with ```th main.lua > /path/to/logfile.txt ```.
+- You can set ```-batchSize``` to ~160. This is the default config, which will make the model converge in less than 3 days. Pytorch version requires less memory. You should be able to train the model using two TITAN X 12gb with same batch size. In this version we are using LMDBs to load the instructions and ingredients instead of a single HDF5 file.
 
 ## Testing
 
 - Extract features from test set ```python test.py --model_path=snapshots/model*.tar```. They will be saved in ```results```.
 - After feature extraction, compute MedR and recall scores with ```python scripts/rank.py --path_results=results```.
 
-## Visualization
-
-We provide a script to visualize top-1 im2recipe examples in ```./pyscripts/vis.py ```. It will save figures under ```./data/figs/```.
-
 ## Pretrained model
 
-Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/im2recipe_model.t7.gz).
+Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/model_e220_v-4.700.pth.tar).
 You can test it with:
 ```
-th main.lua -test 1 -loadsnap im2recipe_model.t7
-test.py --loadsnap im2recipe_model.t7
+python test.py --model_path=snapshots2/model_e220_v-4.700.pth.tar
 ```
 
 ## Contact
