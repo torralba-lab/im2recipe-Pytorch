@@ -100,8 +100,8 @@ Navigate back to ```./```. Run the following from ```./scripts```:
 
 ```
 python mk_dataset.py 
--vocab /path/to/w2v/vocab.txt 
--stvecs /path/to/skip-instr_files/
+--vocab /path/to/w2v/vocab.txt 
+--sthdir /path/to/skip-instr_files/
 ```
 
 ## Training
