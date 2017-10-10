@@ -46,9 +46,6 @@ class ImagerLoader(data.Dataset):
         self.target_transform = target_transform
         self.loader = loader
 
-        if self.partition=='val':
-            self.partition = 'test'
-
     def __getitem__(self, index):
         recipId  = self.ids[index]
 	# we force 80 percent of them to be a mismatch
