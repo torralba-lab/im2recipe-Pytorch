@@ -116,8 +116,7 @@ def main():
 
         # evaluate on validation set
         if (epoch+1) % opts.valfreq == 0 and epoch != 0:
-            # val_loss = validate(val_loader, model, criterion)
-            val_loss = validate2(val_loader, model, criterion)
+            val_loss = validate(val_loader, model, criterion)
         
             # check patience
             if val_loss >= best_val:
@@ -222,61 +221,6 @@ def train(train_loader, model, criterion, optimizer, epoch):
                    recipeLR=optimizer.param_groups[0]['lr']))                 
 
 def validate(val_loader, model, criterion):
-    batch_time = AverageMeter()
-    cos_losses = AverageMeter()
-    if opts.semantic_reg:
-        img_losses = AverageMeter()
-        rec_losses = AverageMeter()
-
-    # switch to evaluate mode
-    model.eval()
-
-    end = time.time()
-    for i, (input, target) in enumerate(val_loader):
-        input_var = list() 
-        for j in range(len(input)):
-            input_var.append(torch.autograd.Variable(input[j], volatile=True).cuda())
-        target_var = list()
-        for j in range(len(target)):
-            target[j] = target[j].cuda(async=True)
-            target_var.append(torch.autograd.Variable(target[j], volatile=True))
-
-        # compute output
-        output = model(input_var[0],input_var[1], input_var[2], input_var[3], input_var[4])
-
-        # compute loss
-        if opts.semantic_reg:
-            cos_loss = criterion[0](output[0], output[1], target_var[0])
-            img_loss = criterion[1](output[2], target_var[1])
-            rec_loss = criterion[1](output[3], target_var[2])
-            # combined loss
-            loss =  opts.cos_weight * cos_loss +\
-                    opts.cls_weight * img_loss +\
-                    opts.cls_weight * rec_loss 
-
-            # measure performance and record losses
-            cos_losses.update(cos_loss.data[0], input[0].size(0))
-            img_losses.update(img_loss.data[0], input[0].size(0))
-            rec_losses.update(rec_loss.data[0], input[0].size(0))
-        else:
-            loss = criterion(output[0], output[1], target_var[0])
-            # measure performance and record loss
-            cos_losses.update(loss.data[0], input[0].size(0))
-
-        # measure elapsed time
-        batch_time.update(time.time() - end)
-        end = time.time()
-
-    if opts.semantic_reg:
-        print('* Validation cosine loss {losses.avg:.4f}'.format(losses=cos_losses))
-        print('* Validation img class loss {losses.avg:.4f}'.format(losses=img_losses))
-        print('* Validation rec class loss {losses.avg:.4f}'.format(losses=rec_losses))
-    else:
-        print('* Validation loss {losses.avg:.4f}'.format(losses=cos_losses))
-
-    return cos_losses.avg
-
-def validate2(val_loader, model, criterion):
     batch_time = AverageMeter()
     cos_losses = AverageMeter()
     if opts.semantic_reg:
