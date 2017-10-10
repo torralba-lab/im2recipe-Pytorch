@@ -60,6 +60,7 @@ def get_parser():
     parser.add_argument('--maxlen', default=20, type=int)
     parser.add_argument('--vocab', default = 'vocab.txt', type=str)
     parser.add_argument('--dataset', default = 'data/recipe1M/', type=str)
+    parser.add_argument('--sthdir', default = '../../data/', type=str)
 
     return parser
 

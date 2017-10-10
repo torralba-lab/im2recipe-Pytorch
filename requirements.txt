@@ -1,0 +1,9 @@
+numpy
+scipy
+pillow
+lmdb
+torchfile
+scikit-learn
+tqdm
+word2vec
+nltk

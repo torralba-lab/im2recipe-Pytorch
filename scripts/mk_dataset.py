@@ -51,10 +51,9 @@ with open('remove1M.txt','r') as f:
 t = time.time()
 print ("Loading skip-thought vectors...")
 
-sthdir = '../../data'
-st_vecs_train = get_st(os.path.join(sthdir, 'encs_train_1024.t7'))
-st_vecs_val = get_st(os.path.join(sthdir, 'encs_val_1024.t7'))
-st_vecs_test = get_st(os.path.join(sthdir, 'encs_test_1024.t7'))
+st_vecs_train = get_st(os.path.join(opts.sthdir, 'encs_train_1024.t7'))
+st_vecs_val = get_st(os.path.join(opts.sthdir, 'encs_val_1024.t7'))
+st_vecs_test = get_st(os.path.join(opts.sthdir, 'encs_test_1024.t7'))
 
 st_vecs = {'train':st_vecs_train,'val':st_vecs_val,'test':st_vecs_test}
 stid2idx = {'train':{},'val':{},'test':{}}
