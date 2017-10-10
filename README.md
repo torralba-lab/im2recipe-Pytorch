@@ -130,7 +130,7 @@ python train.py
 Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/model_e220_v-4.700.pth.tar).
 You can test it with:
 ```
-python test.py --model_path=snapshots2/model_e220_v-4.700.pth.tar
+python test.py --model_path=snapshots/model_e220_v-4.700.pth.tar
 ```
 
 ## Contact
