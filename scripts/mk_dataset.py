@@ -79,17 +79,17 @@ with open('classes1M.pkl','rb') as f:
 st_ptr = 0
 numfailed = 0
 
-if os.path.isdir('train_lmdb'):
-    shutil.rmtree('train_lmdb')
-if os.path.isdir('val_lmdb'):
-    shutil.rmtree('val_lmdb')
-if os.path.isdir('test_lmdb'):
-    shutil.rmtree('test_lmdb')
+if os.path.isdir('../data/train_lmdb'):
+    shutil.rmtree('../data/train_lmdb')
+if os.path.isdir('../data/val_lmdb'):
+    shutil.rmtree('../data/val_lmdb')
+if os.path.isdir('../data/test_lmdb'):
+    shutil.rmtree('../data/test_lmdb')
 
 env = {'train' : [], 'val':[], 'test':[]}
-env['train'] = lmdb.open('train_lmdb',map_size=int(1e11))
-env['val']   = lmdb.open('val_lmdb',map_size=int(1e11))
-env['test']  = lmdb.open('test_lmdb',map_size=int(1e11))
+env['train'] = lmdb.open('../data/train_lmdb',map_size=int(1e11))
+env['val']   = lmdb.open('../data/val_lmdb',map_size=int(1e11))
+env['test']  = lmdb.open('../data/test_lmdb',map_size=int(1e11))
 
 print('Assembling dataset.')
 img_ids = dict()
