@@ -29,7 +29,7 @@ class ImagerLoader(data.Dataset):
         self.env = lmdb.open(os.path.join(data_path,partition+'_lmdb'), max_readers=1, readonly=True, lock=False,
                              readahead=False, meminit=False)
 
-        with open(os.path.join(data_path,partition+'_keys.pkl' % partition),'rb') as f:
+        with open(os.path.join(data_path,partition+'_keys.pkl'),'rb') as f:
             self.ids = pickle.load(f)
 
         self.square  = square
