@@ -59,7 +59,7 @@ To train the model, you will need the following files:
 * `data/test_keys`: pickle (testing) file containing skip-instructions vectors, ingredient ids and categories.
 * `data/text/vocab.bin`: ingredient Word2Vec vocabulary. Used during training to select word2vec vectors given ingredient ids.
 
-The links to download them are available [here](http://im2recipe.csail.mit.edu/dataset/download).
+The links to download them are available [here](http://im2recipe.csail.mit.edu/dataset/download). LMDBs and pickle files can be found in train.tar, val.tar and test.tar. 
 
 ## Prepare training data
 

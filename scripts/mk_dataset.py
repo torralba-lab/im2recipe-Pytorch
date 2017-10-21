@@ -122,7 +122,7 @@ for i,entry in tqdm(enumerate(dataset)):
     keys[partition].append(entry['id'])
 
 for k in keys.keys():
-    with open('{}_keys.pkl'.format(k),'wb') as f:
+    with open('../data/{}_keys.pkl'.format(k),'wb') as f:
         pickle.dump(keys[k],f)
 
 print('Training samples: %d - Validation samples: %d - Testing samples: %d' % (len(keys['train']),len(keys['val']),len(keys['test'])))
