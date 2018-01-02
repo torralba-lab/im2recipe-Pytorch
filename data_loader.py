@@ -1,6 +1,8 @@
+from __future__ import print_function
 import torch.utils.data as data
 from PIL import Image
 import os
+import sys
 import pickle
 import numpy as np
 import lmdb
@@ -11,8 +13,9 @@ def default_loader(path):
         im = Image.open(path).convert('RGB')
         return im
     except:
-        # print path
-        return Image.new('RGB', (224,224), 'white')
+        print(..., file=sys.stderr)
+        return Image.new('RGB', (224, 224), 'white')
+
 
 class ImagerLoader(data.Dataset):
     def __init__(self, img_path, transform=None, target_transform=None,
@@ -71,8 +74,10 @@ class ImagerLoader(data.Dataset):
             else:
                 imgIdx = 0 
 
-            path = self.imgPath + imgs[imgIdx]['id'] 
-	else:
+            loader_path = [imgs[imgIdx]['id'][i] for i in range(4)]
+            loader_path =  os.path.join(*loader_path)
+            path = os.path.join(self.imgPath, self.partition, loader_path, imgs[imgIdx]['id'])
+        else:
             # we randomly pick one non-matching image
             all_idx = range(len(self.ids))
             rndindex = np.random.choice(all_idx) 
