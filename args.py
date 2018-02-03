@@ -5,7 +5,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description='tri-joint parameters')
     # general
     parser.add_argument('--seed', default=1234, type=int)
-    parser.add_argument('--cuda', default=True,type=bool)
+    parser.add_argument('--no-cuda', action='store_true')
 
     # data
     parser.add_argument('--img_path', default='data/images/')

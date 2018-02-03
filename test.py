@@ -20,7 +20,7 @@ opts = parser.parse_args()
 # =============================================================================
 
 torch.manual_seed(opts.seed)
-if opts.cuda:
+if not opts.no_cuda:
         torch.cuda.manual_seed(opts.seed)
 
 np.random.seed(opts.seed)
@@ -30,17 +30,22 @@ def main():
     model = im2recipe()
     model.visionMLP = torch.nn.DataParallel(model.visionMLP, device_ids=[0,1,2,3])
     # model.visionMLP = torch.nn.DataParallel(model.visionMLP, device_ids=[0,1])
-    model.cuda()
+    if not opts.no_cuda:
+        model.cuda()
 
     # define loss function (criterion) and optimizer
     # cosine similarity between embeddings -> input1, input2, target
-    cosine_crit = nn.CosineEmbeddingLoss(0.1).cuda()
+    cosine_crit = nn.CosineEmbeddingLoss(0.1)
+    if not opts.no_cuda:
+        cosine_crit.cuda()
     # cosine_crit = nn.CosineEmbeddingLoss(0.1)
     if opts.semantic_reg:
         weights_class = torch.Tensor(opts.numClasses).fill_(1)
         weights_class[0] = 0 # the background class is set to 0, i.e. ignore
         # CrossEntropyLoss combines LogSoftMax and NLLLoss in one single class
-        class_crit = nn.CrossEntropyLoss(weight=weights_class).cuda()
+        class_crit = nn.CrossEntropyLoss(weight=weights_class)
+        if not opts.no_cuda:
+            class_crit.cuda()
         # class_crit = nn.CrossEntropyLoss(weight=weights_class)
         # we will use two different criteria
         criterion = [cosine_crit, class_crit]
@@ -68,7 +73,7 @@ def main():
             normalize,
         ]),data_path=opts.data_path,sem_reg=opts.semantic_reg,partition='test'),
         batch_size=opts.batch_size, shuffle=False,
-        num_workers=opts.workers, pin_memory=True)
+        num_workers=opts.workers, pin_memory=(not opts.no_cuda))
     print 'Test loader prepared.'
 
     # run test
@@ -88,11 +93,12 @@ def test(test_loader, model, criterion):
     for i, (input, target) in enumerate(test_loader):
         input_var = list() 
         for j in range(len(input)):
-            input_var.append(torch.autograd.Variable(input[j], volatile=True).cuda())
+            v = torch.autograd.Variable(input[j], volatile=True)
         target_var = list()
         for j in range(len(target)-2): # we do not consider the last two objects of the list
-            target[j] = target[j].cuda(async=True)
-            target_var.append(torch.autograd.Variable(target[j], volatile=True))
+            target[j] = target[j]
+            v = torch.autograd.Variable(target[j], volatile=True)
+            target_var.append(v.cuda() if not opts.no_cuda else v)
 
         # compute output
         output = model(input_var[0],input_var[1], input_var[2], input_var[3], input_var[4])
