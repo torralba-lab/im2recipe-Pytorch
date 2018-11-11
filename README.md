@@ -14,6 +14,14 @@ git clone --recursive https://github.com/torralba-lab/im2recipe-Pytorch.git
 If you find this code useful, please consider citing:
 
 ```
+@article{marin2018learning,
+  title = {Recipe1M: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and Food Images},
+  author = {Marin, Javier and Biswas, Aritro and Ofli, Ferda and Hynes, Nicholas and 
+  Salvador, Amaia and Aytar, Yusuf and Weber, Ingmar and Torralba, Antonio},
+  journal = {arXiv preprint arXiv:1810.06553},
+  year = {2018}
+}
+
 @inproceedings{salvador2017learning,
   title={Learning Cross-modal Embeddings for Cooking Recipes and Food Images},
   author={Salvador, Amaia and Hynes, Nicholas and Aytar, Yusuf and Marin, Javier and 
@@ -127,11 +135,13 @@ python train.py
 
 ## Pretrained model
 
-Our best model can be downloaded [here](http://data.csail.mit.edu/im2recipe/model_e220_v-4.700.pth.tar).
+Our best model trained with Recipe1M+ (journal extension) can be downloaded [here](http://data.csail.mit.edu/im2recipe/model_e500_v-8.950.pth.tar).
+
 You can test it with:
 ```
-python test.py --model_path=snapshots/model_e220_v-4.700.pth.tar
+python test.py --model_path=snapshots/model_e500_v-8.950.pth.tar
 ```
+Our best model trained with Recipe1M (CVPR paper) can be downloaded [here](http://data.csail.mit.edu/im2recipe/model_e220_v-4.700.pth.tar).
 
 ## Contact
 
