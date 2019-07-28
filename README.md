@@ -14,12 +14,12 @@ git clone --recursive https://github.com/torralba-lab/im2recipe-Pytorch.git
 If you find this code useful, please consider citing:
 
 ```
-@article{marin2018learning,
-  title = {Recipe1M: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and Food Images},
+@article{marin2019learning,
+  title = {Recipe1M+: A Dataset for Learning Cross-Modal Embeddings for Cooking Recipes and Food Images},
   author = {Marin, Javier and Biswas, Aritro and Ofli, Ferda and Hynes, Nicholas and 
   Salvador, Amaia and Aytar, Yusuf and Weber, Ingmar and Torralba, Antonio},
-  journal = {arXiv preprint arXiv:1810.06553},
-  year = {2018}
+  journal = {{IEEE} Trans. Pattern Anal. Mach. Intell.},
+  year = {2019}
 }
 
 @inproceedings{salvador2017learning,
