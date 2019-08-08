@@ -115,7 +115,7 @@ else:
 
         if counts['train'] > MIN_SAMPLES and counts['val'] > 0 and counts['test'] > 0:
             ind2class[n_class] = query
-            print n_class, query, counts
+            print(n_class, query, counts)
             n_class+=1
         else:
             for id in matching_ids: # reset classes to background
@@ -162,7 +162,7 @@ else:
 
         if counts['train'] > MIN_SAMPLES and counts['val'] > 0 and counts['test'] > 0:
             ind2class[n_class] = query
-            print n_class, query, counts
+            print(n_class, query, counts)
             n_class+=1
         else:
             for id in matching_ids: # reset classes to background
@@ -170,7 +170,7 @@ else:
 
 
     ind2class[0] = 'background'
-    print len(ind2class)
+    print(len(ind2class))
     with open('../data/classes'+params.suffix+'.pkl','wb') as f:
         pickle.dump(class_dict,f)
         pickle.dump(ind2class,f)

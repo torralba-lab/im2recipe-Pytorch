@@ -20,40 +20,35 @@ opts = parser.parse_args()
 # =============================================================================
 
 torch.manual_seed(opts.seed)
-if not opts.no_cuda:
+# if opts.cuda:
+if True:
         torch.cuda.manual_seed(opts.seed)
 
 np.random.seed(opts.seed)
 
+device = torch.device(*('cuda',0))
+
 def main():
    
     model = im2recipe()
-    model.visionMLP = torch.nn.DataParallel(model.visionMLP, device_ids=[0,1,2,3])
-    # model.visionMLP = torch.nn.DataParallel(model.visionMLP, device_ids=[0,1])
-    if not opts.no_cuda:
-        model.cuda()
+    model.visionMLP = torch.nn.DataParallel(model.visionMLP, device_ids=[0])
+    model.to(device)
 
     # define loss function (criterion) and optimizer
     # cosine similarity between embeddings -> input1, input2, target
-    cosine_crit = nn.CosineEmbeddingLoss(0.1)
-    if not opts.no_cuda:
-        cosine_crit.cuda()
-    # cosine_crit = nn.CosineEmbeddingLoss(0.1)
+    cosine_crit = nn.CosineEmbeddingLoss(0.1).to(device)
     if opts.semantic_reg:
         weights_class = torch.Tensor(opts.numClasses).fill_(1)
         weights_class[0] = 0 # the background class is set to 0, i.e. ignore
         # CrossEntropyLoss combines LogSoftMax and NLLLoss in one single class
-        class_crit = nn.CrossEntropyLoss(weight=weights_class)
-        if not opts.no_cuda:
-            class_crit.cuda()
-        # class_crit = nn.CrossEntropyLoss(weight=weights_class)
+        class_crit = nn.CrossEntropyLoss(weight=weights_class).to(device)
         # we will use two different criteria
         criterion = [cosine_crit, class_crit]
     else:
         criterion = cosine_crit
 
     print("=> loading checkpoint '{}'".format(opts.model_path))
-    checkpoint = torch.load(opts.model_path)
+    checkpoint = torch.load(opts.model_path, encoding='latin1')
     opts.start_epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
     print("=> loaded checkpoint '{}' (epoch {})"
@@ -73,8 +68,8 @@ def main():
             normalize,
         ]),data_path=opts.data_path,sem_reg=opts.semantic_reg,partition='test'),
         batch_size=opts.batch_size, shuffle=False,
-        num_workers=opts.workers, pin_memory=(not opts.no_cuda))
-    print 'Test loader prepared.'
+        num_workers=opts.workers, pin_memory=True)
+    print('Test loader prepared.')
 
     # run test
     test(test_loader, model, criterion)
@@ -93,19 +88,17 @@ def test(test_loader, model, criterion):
     for i, (input, target) in enumerate(test_loader):
         input_var = list() 
         for j in range(len(input)):
-            v = torch.autograd.Variable(input[j], volatile=True)
+            input_var.append(input[j].to(device))
         target_var = list()
         for j in range(len(target)-2): # we do not consider the last two objects of the list
-            target[j] = target[j]
-            v = torch.autograd.Variable(target[j], volatile=True)
-            target_var.append(v.cuda() if not opts.no_cuda else v)
+            target_var.append(target[j].to(device))
 
         # compute output
         output = model(input_var[0],input_var[1], input_var[2], input_var[3], input_var[4])
    
         # compute loss
         if opts.semantic_reg:
-            cos_loss = criterion[0](output[0], output[1], target_var[0])
+            cos_loss = criterion[0](output[0], output[1], target_var[0].float())
             img_loss = criterion[1](output[2], target_var[1])
             rec_loss = criterion[1](output[3], target_var[2])
             # combined loss
@@ -114,9 +107,9 @@ def test(test_loader, model, criterion):
                     opts.cls_weight * rec_loss 
 
             # measure performance and record losses
-            cos_losses.update(cos_loss.data[0], input[0].size(0))
-            img_losses.update(img_loss.data[0], input[0].size(0))
-            rec_losses.update(rec_loss.data[0], input[0].size(0))
+            cos_losses.update(cos_loss.data, input[0].size(0))
+            img_losses.update(img_loss.data, input[0].size(0))
+            rec_losses.update(rec_loss.data, input[0].size(0))
         else:
             loss = criterion(output[0], output[1], target_var[0])
             # measure performance and record loss
