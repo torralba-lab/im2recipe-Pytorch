@@ -156,4 +156,4 @@ Our best model trained with Recipe1M (CVPR paper) can be downloaded [here](http:
 
 ## Contact
 
-For any questions or suggestions you can use the issues section or reach us at jmarin@csail.mit.edu or amaia.salvador@upc.edu.
+For any questions or suggestions you can use the issues section or reach us at jmarin@csail.mit.edu.
