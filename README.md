@@ -44,9 +44,9 @@ If you find this code useful, please consider citing:
 
 ## Installation
 
-We do recommend to create a new environment with Python 3.7. Right after it, run ```pip install --upgrade cython``` and then install the dependencies with ```pip install -r requirements.txt```. Notice that this will install the latest PyTorch version available. Once you finish, you will need to install [torchwordemb](https://github.com/iamalbert/pytorch-wordemb). In order to do that (or at least the way we found it worked for us), we downloaded it and install via ```python setup.py install```. In case you get an error related to  ```return {vocab, dest};```, you just need to change the original code to ```return VocabAndTensor{vocab, dest};```, and run ```python setup.py install``` again.
+We do recommend to create a new environment with Python 3.7. Right after it, run ```pip install --upgrade cython``` and then install the dependencies with ```pip install -r requirements.txt```. Notice that this will install the latest PyTorch version available. Once you finish, you will need to install [torchwordemb](https://github.com/iamalbert/pytorch-wordemb). In order to do that (or at least the way we found it worked for us), we downloaded and installed it via ```python setup.py install```. In case you get an error related to  ```return {vocab, dest};```, you just need to change the original code to ```return VocabAndTensor{vocab, dest};```, and run ```python setup.py install``` again.
 
-## Recipe1M and Recipe1M+ Datasets[torchwordemb]
+## Recipe1M and Recipe1M+ Datasets
 
 Our Recipe1M/Recipe1M+ datasets are available for download [here](http://im2recipe.csail.mit.edu/dataset/download).
 
