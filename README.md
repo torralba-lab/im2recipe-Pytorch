@@ -44,13 +44,11 @@ If you find this code useful, please consider citing:
 
 ## Installation
 
-Install [PyTorch](http://pytorch.org/) following the official website start guide
+We do recommend to create a new environment with Python 3.7. Right after it, run ```pip install --upgrade cython``` and then install the dependencies with ```pip install -r requirements.txt```. Notice that this will install the latest PyTorch version available. Once you finish, you will need to install [torchwordemb](https://github.com/iamalbert/pytorch-wordemb). In order to do that (or at least the way we found it worked for us), we downloaded and installed it via ```python setup.py install```. In case you get an error related to  ```return {vocab, dest};```, you just need to change the original code to ```return VocabAndTensor{vocab, dest};```, and run ```python setup.py install``` again.
 
-We use Python2.7. Install dependencies with ```pip install -r requirements.txt```
+## Recipe1M and Recipe1M+ Datasets
 
-## Recipe1M Dataset
-
-Our Recipe1M dataset is available for download [here](http://im2recipe.csail.mit.edu/dataset/download).
+Our Recipe1M/Recipe1M+ datasets are available for download [here](http://im2recipe.csail.mit.edu/dataset/download).
 
 ## Vision models
 
@@ -58,27 +56,39 @@ This current version of the code uses a pre-trained ResNet-50.
 
 ## Out-of-the-box training
 
-To train the model, you will need the following files:
+To train the model, you will need to create following files:
 * `data/train_lmdb`: LMDB (training) containing skip-instructions vectors, ingredient ids and categories.
 * `data/train_keys`: pickle (training) file containing skip-instructions vectors, ingredient ids and categories.
 * `data/val_lmdb`: LMDB (validation) containing skip-instructions vectors, ingredient ids and categories.
 * `data/val_keys`: pickle (validation) file containing skip-instructions vectors, ingredient ids and categories.
 * `data/test_lmdb`: LMDB (testing) containing skip-instructions vectors, ingredient ids and categories.
 * `data/test_keys`: pickle (testing) file containing skip-instructions vectors, ingredient ids and categories.
-* `data/text/vocab.bin`: ingredient Word2Vec vocabulary. Used during training to select word2vec vectors given ingredient ids.
+* `data/text/vocab.txt`: file containing all the vocabulary found within the recipes.
 
-The links to download them are available [here](http://im2recipe.csail.mit.edu/dataset/download). LMDBs and pickle files can be found in train.tar, val.tar and test.tar. 
+And download the following ones: 
+* `data/text/vocab.bin`: ingredient Word2Vec vocabulary. Used during training to select word2vec vectors given ingredient ids.
+* `data/food101_classes_renamed.txt`: Food101 classes used to create the bigrams.
+* `data/encs_train_1024.t7`: Skip-instructions train partition.
+* `data/encs_val_1024.t7`: Skip-instructions val partition.
+* `data/encs_test_1024.t7`: Skip-instructions test partition.
+* `data/recipe1M/layer2+.json`: Recipe1M+ layer2.
+* `data/images/Recipe1M+_{a..f}.tar`: 6 Tar files containing part of the images available in Recipe1M+ (~210Gb each).
+* `data/images/Recipe1M+_{0..9}.tar`: 10 Tar files containing part of the images available in Recipe1M+ (~210Gb each).
+
+The links to download them are available [here](http://im2recipe.csail.mit.edu/dataset/download). Original Recipe1M LMDBs and pickle files can be found in train.tar, val.tar and test.tar. 
+
+It is worth mentioning that the code is expecting images to be located in a four-level folder structure, e.g. image named `0fa8309c13.jpg` can be found in `./data/images/0/f/a/8/0fa8309c13.jpg`. Each one of the Tar files contains the first folder level, 16 in total. If you do not have enough space after downloading the Tar files, you can try to mount them locally and access them. We did use [ratarmount](https://github.com/mxmlnkn/ratarmount) in our latest test experiments. In order to properly access the images with ratarmount, we temporarily changed our code. We basically tried up to three times to load an image within our `default_loader`.
 
 ## Prepare training data
 
-We also provide the steps to format and prepare Recipe1M data for training the trijoint model. We hope these instructions will allow others to train similar models with other data sources as well.
+We also provide the steps to format and prepare Recipe1M/Recipe1M+ data for training the trijoint model. We hope these instructions will allow others to train similar models with other data sources as well.
 
 ### Choosing semantic categories
 
 We provide the script we used to extract semantic categories from bigrams in recipe titles:
 
-- Run ```python bigrams --crtbgrs```. This will save to disk all bigrams in the corpus of all recipe titles in the training set, sorted by frequency.
-- Running the same script with ```--nocrtbgrs``` will create class labels from those bigrams adding food101 categories.
+- Run ```python bigrams --crtbgrs```. This will save to disk all bigrams in the corpus of all recipe titles in the training set, sorted by frequency. Note that you will need to create first ```vocab.txt``` running ```python get_vocab.py ../data/vocab.bin``` within ```./scripts/```.
+- Running the same script again with ```--nocrtbgrs``` will create class labels from those bigrams adding food101 categories.
 
 These steps will create a file called ```classes1M.pkl``` in ```./data/``` that will be used later to create the LMDB file including categories.
 
@@ -111,6 +121,7 @@ python mk_dataset.py
 --vocab /path/to/w2v/vocab.txt 
 --sthdir /path/to/skip-instr_files/
 ```
+Notice, that layer2 within ```./data/recipe1M/layer2.json``` will need to be replaced by layer2+.json in order to create our extended Recipe1M+ dataset.
 
 ## Training
 
@@ -145,4 +156,4 @@ Our best model trained with Recipe1M (CVPR paper) can be downloaded [here](http:
 
 ## Contact
 
-For any questions or suggestions you can use the issues section or reach us at jmarin@csail.mit.edu or amaia.salvador@upc.edu.
+For any questions or suggestions you can use the issues section or reach us at jmarin@csail.mit.edu.
