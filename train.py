@@ -20,7 +20,11 @@ parser = get_parser()
 opts = parser.parse_args()
 # =============================================================================
 
-device = torch.device(*('cuda',0))
+if not(torch.cuda.device_count()):
+    device = torch.device(*('cpu',0))
+else:
+    torch.cuda.manual_seed(opts.seed)
+    device = torch.device(*('cuda',0))
 
 def main():
 

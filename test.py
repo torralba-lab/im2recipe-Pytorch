@@ -20,18 +20,19 @@ opts = parser.parse_args()
 # =============================================================================
 
 torch.manual_seed(opts.seed)
-# if opts.cuda:
-if True:
-        torch.cuda.manual_seed(opts.seed)
 
 np.random.seed(opts.seed)
 
-device = torch.device(*('cuda',0))
+if not(torch.cuda.device_count()):
+    device = torch.device(*('cpu',0))
+else:
+    torch.cuda.manual_seed(opts.seed)
+    device = torch.device(*('cuda',0))
 
 def main():
    
     model = im2recipe()
-    model.visionMLP = torch.nn.DataParallel(model.visionMLP, device_ids=[0])
+    model.visionMLP = torch.nn.DataParallel(model.visionMLP)
     model.to(device)
 
     # define loss function (criterion) and optimizer
@@ -48,7 +49,10 @@ def main():
         criterion = cosine_crit
 
     print("=> loading checkpoint '{}'".format(opts.model_path))
-    checkpoint = torch.load(opts.model_path, encoding='latin1')
+    if device.type=='cpu':
+        checkpoint = torch.load(opts.model_path, encoding='latin1', map_location='cpu')
+    else:
+        checkpoint = torch.load(opts.model_path, encoding='latin1')
     opts.start_epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
     print("=> loaded checkpoint '{}' (epoch {})"
