@@ -8,7 +8,6 @@ import numpy as np
 import lmdb
 import torch
 
-
 def default_loader(path):
     try:
         im = Image.open(path).convert('RGB')
@@ -16,8 +15,7 @@ def default_loader(path):
     except:
         print(..., file=sys.stderr)
         return Image.new('RGB', (224, 224), 'white')
-
-
+       
 class ImagerLoader(data.Dataset):
     def __init__(self, img_path, transform=None, target_transform=None,
                  loader=default_loader, square=False, data_path=None, partition=None, sem_reg=None):
@@ -63,8 +61,8 @@ class ImagerLoader(data.Dataset):
         target = match and 1 or -1
 
         with self.env.begin(write=False) as txn:
-            serialized_sample = txn.get(self.ids[index])
-        sample = pickle.loads(serialized_sample)
+            serialized_sample = txn.get(self.ids[index].encode('latin1'))
+        sample = pickle.loads(serialized_sample,encoding='latin1')
         imgs = sample['imgs']
 
         # image
@@ -77,7 +75,8 @@ class ImagerLoader(data.Dataset):
 
             loader_path = [imgs[imgIdx]['id'][i] for i in range(4)]
             loader_path = os.path.join(*loader_path)
-            path = os.path.join(self.imgPath, self.partition, loader_path, imgs[imgIdx]['id'])
+            # path = os.path.join(self.imgPath, self.partition, loader_path, imgs[imgIdx]['id'])
+            path = os.path.join(self.imgPath, loader_path, imgs[imgIdx]['id'])
         else:
             # we randomly pick one non-matching image
             all_idx = range(len(self.ids))
@@ -86,9 +85,9 @@ class ImagerLoader(data.Dataset):
                 rndindex = np.random.choice(all_idx)  # pick a random index
 
             with self.env.begin(write=False) as txn:
-                serialized_sample = txn.get(self.ids[rndindex])
+                serialized_sample = txn.get(self.ids[rndindex].encode('latin1'))
 
-            rndsample = pickle.loads(serialized_sample)
+            rndsample = pickle.loads(serialized_sample,encoding='latin1')
             rndimgs = rndsample['imgs']
 
             if self.partition == 'train':  # if training we pick a random image
@@ -97,9 +96,12 @@ class ImagerLoader(data.Dataset):
             else:
                 imgIdx = 0
 
-            path = self.imgPath + rndimgs[imgIdx]['id']
+            loader_path = [rndimgs[imgIdx]['id'][i] for i in range(4)]
+            loader_path = os.path.join(*loader_path)
+            path = os.path.join(self.imgPath, loader_path, imgs[imgIdx]['id'])
+            # path = self.imgPath + rndimgs[imgIdx]['id']
 
-            # instructions
+        # instructions
         instrs = sample['intrs']
         itr_ln = len(instrs)
         t_inst = np.zeros((self.maxInst, np.shape(instrs)[1]), dtype=np.float32)

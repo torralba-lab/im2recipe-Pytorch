@@ -5,7 +5,7 @@ def detect_ingrs(recipe, vocab):
         ingr_names = [ingr['text'] for ingr in recipe['ingredients'] if ingr['text']]
     except:
         ingr_names = []
-        print "Could not load ingredients! Moving on..."
+        print("Could not load ingredients! Moving on...")
 
     detected = set()
     for name in ingr_names:
@@ -34,7 +34,7 @@ def process_image(impath,imsize):
         img = imresize(img, float(imsize) / min(H0, W0))
         fail = 0
     except:
-        print "Could not load image...Using black one instead."
+        print("Could not load image...Using black one instead.")
         img = np.zeros((imsize,imsize,3))
         fail =1
 

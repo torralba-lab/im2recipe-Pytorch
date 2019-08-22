@@ -22,7 +22,7 @@ maxNumImgs = 5
 def get_st(file):
     info = torchfile.load(file)
 
-    ids = info['ids']
+    ids = info[b'ids']
 
     imids = []
     for i,id in enumerate(ids):
@@ -117,7 +117,7 @@ for i,entry in tqdm(enumerate(dataset)):
         'classes':class_dict[entry['id']]+1, 'imgs':imgs[:maxNumImgs]} ) 
 
     with env[partition].begin(write=True) as txn:
-        txn.put('{}'.format(entry['id']), serialized_sample)
+        txn.put('{}'.format(entry['id']).encode('latin1'), serialized_sample)
     # keys to be saved in a pickle file    
     keys[partition].append(entry['id'])
 

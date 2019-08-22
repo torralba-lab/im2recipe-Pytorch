@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.parallel
-import torch.legacy as legacy
 import torch.optim
 import torch.utils.data
 import torchvision.transforms as transforms

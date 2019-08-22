@@ -1,5 +1,6 @@
 from collections import defaultdict
-import HTMLParser
+# import HTMLParser
+from html.parser import HTMLParser
 import copy
 import os
 import random
@@ -53,7 +54,7 @@ REPLACEMENTS = {
     '\\u0302': '', '\\uf0b0': ''
 }
 
-parser = HTMLParser.HTMLParser()
+parser = HTMLParser()
 def prepro_txt(text):
     import urllib
 
