@@ -40,7 +40,8 @@ If you find this code useful, please consider citing:
 6. [Training](#training)
 7. [Testing](#testing)
 8. [Pretrained model](#pretrained-model)
-9. [Contact](#contact)
+9. [Recipes with nutritional info](#recipes-with-nutritional-info)
+10. [Contact](#contact)
 
 ## Installation
 
@@ -153,6 +154,52 @@ You can test it with:
 python test.py --model_path=snapshots/model_e500_v-8.950.pth.tar
 ```
 Our best model trained with Recipe1M (CVPR paper) can be downloaded [here](http://data.csail.mit.edu/im2recipe/model_e220_v-4.700.pth.tar).
+
+## Recipes with nutritional info
+
+We also provide a subset of recipes with nutritional information. Below you can see an example:
+```
+{'fsa_lights_per100g': {'fat': 'green',
+  'salt': 'green',
+  'saturates': 'green',
+  'sugars': 'orange'},
+ 'id': '000095fc1d',
+ 'ingredients': [{'text': 'yogurt, greek, plain, nonfat'},
+  {'text': 'strawberries, raw'},
+  {'text': 'cereals ready-to-eat, granola, homemade'}],
+ 'instructions': [{'text': 'Layer all ingredients in a serving dish.'}],
+ 'nutr_per_ingredient': [{'fat': 0.8845044000000001,
+   'nrg': 133.80964,
+   'pro': 23.110512399999998,
+   'sat': 0.26535132,
+   'sod': 81.64656,
+   'sug': 7.348190400000001},
+  {'fat': 0.46,
+   'nrg': 49.0,
+   'pro': 1.02,
+   'sat': 0.023,
+   'sod': 2.0,
+   'sug': 7.43},
+  {'fat': 7.415,
+   'nrg': 149.25,
+   'pro': 4.17,
+   'sat': 1.207,
+   'sod': 8.0,
+   'sug': 6.04}],
+ 'nutr_values_per100g': {'energy': 81.12946131894766,
+  'fat': 2.140139263515891,
+  'protein': 6.914436593565536,
+  'salt': 0.05597816738985967,
+  'saturates': 0.36534716195613937,
+  'sugars': 5.08634103436144},
+ 'partition': 'train',
+ 'quantity': [{'text': '8'}, {'text': '1'}, {'text': '1/4'}],
+ 'title': 'Yogurt Parfaits',
+ 'unit': [{'text': 'ounce'}, {'text': 'cup'}, {'text': 'cup'}],
+ 'url': 'http://tastykitchen.com/recipes/breakfastbrunch/yogurt-parfaits/',
+ 'weight_per_ingr': [226.796, 152.0, 30.5]}
+```
+Note that these recipes include the matched ingredients from USDA instead of the original ones. There are 35,867 recipes for training, 7,687 for validation and 7,681 for testing. In order to obtain the grams of salt, we multiplied the sodium by 2.5 and divided it by 1000. Total weight per ingredient, fat, proteins/pro, salt, saturates/sat and sugars/sug are expressed in grams. Sodium/sod is expressed in mg and energy/nrg in kcal. FSA traffic lights are also included per 100g.
 
 ## Contact
 
