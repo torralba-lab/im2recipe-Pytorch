@@ -286,7 +286,7 @@ def rank(opts, img_embeds, rec_embeds, rec_ids):
     glob_recall = {1:0.0,5:0.0,10:0.0}
     for i in range(10):
 
-        ids = random.sample(xrange(0,len(names)), N)
+        ids = random.sample(range(0,len(names)), N)
         im_sub = im_vecs[ids,:]
         instr_sub = instr_vecs[ids,:]
         ids_sub = names[ids]
