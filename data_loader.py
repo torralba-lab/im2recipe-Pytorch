@@ -26,7 +26,8 @@ class ImagerLoader(data.Dataset):
         if partition is None:
             raise Exception('Unknown partition type %s.' % partition)
         else:
-            self.partition = partition
+            # self.partition = partition
+            self.partion = "test" # for inference only
 
         self.env = lmdb.open(os.path.join(data_path, partition + '_lmdb'), max_readers=1, readonly=True, lock=False,
                              readahead=False, meminit=False)
