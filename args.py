@@ -38,7 +38,7 @@ def get_parser():
     parser.add_argument('--weight_decay', default=0, type=float)
     parser.add_argument('--epochs', default=720, type=int)
     parser.add_argument('--start_epoch', default=0, type=int)
-    parser.add_argument('--ingrW2V', default='data/vocab.bin',type=str)
+    parser.add_argument('--ingrW2V', default='data/text/vocab.bin',type=str)
     parser.add_argument('--valfreq', default=10,type=int)  
     parser.add_argument('--patience', default=1, type=int)
     parser.add_argument('--freeVision', default=False, type=bool)
