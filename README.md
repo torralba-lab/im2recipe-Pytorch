@@ -33,7 +33,7 @@ If you find this code useful, please consider citing:
 
 ## Contents
 1. [Installation](#installation)
-2. [Recipe1M Dataset](#recipe1m-dataset)
+2. [Recipe1M Dataset](#recipe1m-and-recipe1m-datasets)
 3. [Vision models](#vision-models)
 4. [Out-of-the-box training](#out-of-the-box-training)
 5. [Prepare training data](#prepare-training-data)
@@ -55,7 +55,7 @@ If you are not using Docker, we do recommend to create a new environment with Py
 
 ## Recipe1M and Recipe1M+ Datasets
 
-Our Recipe1M/Recipe1M+ datasets are available for download [here](http://im2recipe.csail.mit.edu/dataset/download).
+In order to get access to the dataset, please fill the following form [here](https://forms.gle/EzYSu8j3D1LJzVbR8).
 
 ## Vision models
 
