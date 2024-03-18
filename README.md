@@ -82,7 +82,7 @@ And download the following ones:
 * `data/images/Recipe1M+_{a..f}.tar`: 6 Tar files containing part of the images available in Recipe1M+ (~210Gb each).
 * `data/images/Recipe1M+_{0..9}.tar`: 10 Tar files containing part of the images available in Recipe1M+ (~210Gb each).
 
-The links to download them are available [here](http://im2recipe.csail.mit.edu/dataset/download). Original Recipe1M LMDBs and pickle files can be found in train.tar, val.tar and test.tar. 
+To download these files, you first need to complete the following [form](https://forms.gle/EzYSu8j3D1LJzVbR8). After submission, we will share the necessary download links via email. Access to the dataset is granted only for research purposes to universities and research institutions. Original Recipe1M LMDBs and pickle files can be found in train.tar, val.tar and test.tar.
 
 It is worth mentioning that the code is expecting images to be located in a four-level folder structure, e.g. image named `0fa8309c13.jpg` can be found in `./data/images/0/f/a/8/0fa8309c13.jpg`. Each one of the Tar files contains the first folder level, 16 in total. If you do not have enough space after downloading the Tar files, you can try to mount them locally and access them. We did use [ratarmount](https://github.com/mxmlnkn/ratarmount) in our latest test experiments. In order to properly access the images with ratarmount, we temporarily changed our code. We basically tried up to three times to load an image within our `default_loader`.
 
